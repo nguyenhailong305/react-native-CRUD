@@ -5,16 +5,12 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
-  ScrollView,
 } from "react-native";
 import { UseItem } from "../hooks";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import ModalUpdate from "./common/ModalUpdate";
-import ModalAdd from "./common/ModalAdd";
-import { Button, Dialog, Portal } from "react-native-paper";
+import { Dialog, Portal } from "react-native-paper";
 import ModalController from "./common/ModalController";
-
+import Button from "./common/Button";
 const Items = () => {
   const {
     items,
@@ -30,10 +26,10 @@ const Items = () => {
 
   const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const [age, setAge] = useState("");  
+  const [age, setAge] = useState("");
   const [idUpdate, setIdUpdate] = useState("");
   const [nameUpdate, setNameUpdate] = useState("");
-  const [ageUpdate, setAgeUpdate] = useState("");
+  const [ageUpdate, setAgeUpdate] = useState(0);
 
   const [visibleDelete, setDelete] = useState(false);
   const [visibleAdd, setAdd] = useState(false);
@@ -107,7 +103,7 @@ const Items = () => {
                       hideDialog(
                         setIdUpdate(item._id),
                         setNameUpdate(item.name),
-                        setAgeUpdate(item.age)
+                        setAgeUpdate(item.age.toString())
                       );
                     }}
                     name="pen"
@@ -134,49 +130,86 @@ const Items = () => {
         visible={visibleAdd}
         hideDialog={hideDialogAdd}
         title={"Thêm mới"}
-        onOk={() => {
-          name ? handleAddItem({ name: name  , age : age}) : alert("Vui lòng nhập tên"),
-            setName("") , setAge(""),
-            hideDialogAdd(true);
-        }}
-        onCancel={() => hideDialogAdd(true)}
-        
       >
         <TextInput
-          className="w-[310] h-[50] border p-3 rounded-md"
+          className="w-[310] h-[50] border p-3 rounded-md mb-5"
           onChangeText={(text) => {
             setName(text);
           }}
           value={name}
         />
         <TextInput
-        type = "number"
+          type="number"
           className="w-[310] h-[50] border p-3 rounded-md"
           onChangeText={(text) => {
             setAge(text);
           }}
           value={age}
         />
+        <View className="flex flex-row py-5 justify-evenly">
+        <Button
+          width={80}
+          height={45}
+          backgroundColor={"#3F979B"}
+          borderRadius={8}
+          textAlign={"center"}
+          padding={14}
+          onOk={() => {
+            name
+              ? handleAddItem({ name: name, age: age })
+              : alert("Vui lòng nhập tên"),
+              setName(""),
+              setAge(""),
+              hideDialogAdd(true);
+          }}
+          okText={"Submit"}
+        />
+        <Button
+          backgroundColor={"#3F979B"}
+          width={80}
+          height={45}
+          borderRadius={8}
+          textAlign={"center"}
+          padding={14}
+          onOk={() => hideDialogAdd(true)}
+          okText={"Cancel"}
+        />
+
+        </View>
+       
       </ModalController>
       <ModalController
         visible={visible}
         hideDialog={hideDialog}
-        title={"Cập nhật thông tin"}    
+        title={"Cập nhật thông tin"}
         onOk={() => {
-          nameUpdate
-            ? handleUpdateItem({ name: nameUpdate, id: idUpdate , age : ageUpdate })
+          nameUpdate && ageUpdate
+            ? handleUpdateItem({
+                name: nameUpdate,
+                id: idUpdate,
+                age: ageUpdate,
+              })
             : alert("Vui lòng nhập tên cập nhật"),
-            setNameUpdate("") , setAgeUpdate(""),
+            setNameUpdate(""),
+            setAgeUpdate(""),
             hideDialog(true);
         }}
         onCancel={() => hideDialog(true)}
       >
         <TextInput
-          className="w-[310] h-[50] border p-3 rounded-md"
+          className="w-[310] h-[50] border p-3 rounded-md mb-5"
           onChangeText={(text) => {
             setNameUpdate(text);
           }}
           value={nameUpdate}
+        />
+
+        <TextInput
+          className="w-[310] h-[50] border p-3 rounded-md"
+          onChangeText={(text) => {
+            setAgeUpdate(text);
+          }}
+          value={ageUpdate}
         />
       </ModalController>
     </View>
