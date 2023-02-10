@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.1.38:3001'
+const BASE_URL = 'http://192.168.1.52:3001'
 const LIMIT  = 5
 
 const API_METHOD = {

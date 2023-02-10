@@ -13,8 +13,9 @@ exports.getItem = async (req, res) => {
 
 exports.addItem = async (req, res) => {
     try {
-        let name = req.body
-        await Models.create(name)
+        let name = req.body.name
+        let age = req.body.age
+        await Models.create({name : name  , age : age})
         res.send({
             message: "Success"
         })
@@ -25,7 +26,6 @@ exports.addItem = async (req, res) => {
 
 exports.deleteItem = async (req, res) => {
     try {
-        console.log(req.params.id, 'BE')
         await Models.findByIdAndDelete(req.params.id)
         res.send({
             message: "Success"
