@@ -8,7 +8,6 @@ export default function ModalController({
   visible,
   hideDialog,
   title,
-  onOk ,
   children,
 
 }) {

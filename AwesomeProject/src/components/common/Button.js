@@ -5,38 +5,38 @@ import { Dialog, Portal } from "react-native-paper";
 
 export default function Button({
     okText = "Submit",
-    cancelText = "Cancel",
     onOk,
-    onCancel,
     width ,
     height ,
     backgroundColor ,
     padding ,
-    borderRadius ,
-    textAlign
+    margin,
+    fontSize  
+   
 }) {
     const buttonStyle = StyleSheet.flatten([
  
         {backgroundColor : backgroundColor} ,
         {width : width},
         {height : height},
-        {borderRadius : borderRadius},
+        {borderRadius : 8},
         {padding : padding},
-        {textAlign : textAlign},
-      
-        
+        {textAlign : "center"},
+        {margin : margin},
+        {fontSize : fontSize}
+ 
     ])
   return (
          <View >
               <TouchableOpacity
                 style = {buttonStyle} 
                 onPress={onOk}
-              >
-                 
-                <Text className="font-medium"> {okText}</Text>
+              >   
+                <Text className="font-medium text-zinc-200"> {okText}</Text>
               </TouchableOpacity>
             
               </View>
 
   );
 }
+

@@ -41,16 +41,9 @@ const Items = () => {
 
   return (
     <View>
-      {/* <ModalCommon visible={visible} hideDialog={hideDialog}/> */}
-      <View className="relative h-11 mt-4 mr-3">
-        <TouchableOpacity
-          className="absolute  inset-y-0 right-0 w-24  bg-red-400  p-3 rounded-md "
-          onPress={() => hideDialogAdd()}
-        >
-          <Text className="text-center"> Add</Text>
-        </TouchableOpacity>
+      <View style={{ left : "80%" , top : "5%"}} >
+        <Button backgroundColor={"rgb(99,102,241)"} width={70} height={50} padding={18} okText={"Add"} onOk={() => hideDialogAdd()}/>
       </View>
-
       <View className=" border mt-5">
         <View style={styles.tableHeader}>
           <Text style={styles.tableHeaderText}>Name</Text>
@@ -64,38 +57,34 @@ const Items = () => {
               <Text style={styles.tableCell}>{item.name}</Text>
               <Text style={styles.tableCell}>{item.age}</Text>
               <View style={styles.tableCell}>
-                {/* <ModalUpdate
-                  visible={visible}
-                  hideDialog={hideDialog}
-                  handleUpdateItem={handleUpdateItem}
-                  nameUpdate={nameUpdate}
-                  idUpdate={idUpdate}
-                  setNameUpdate={setNameUpdate}
-                /> */}
-
-                <Portal>
-                  <Dialog visible={visibleDelete} onDismiss={hideDialogDelete}>
-                    <Dialog.Title className="text-center text-sm ">
-                      Bạn có chắc muốn xóa không ?
-                    </Dialog.Title>
-                    <Dialog.Content className="flex flex-row justify-center mt-3">
-                      <Button
-                        className="bg-red-400 mr-3 text-slate-900"
-                        onPress={() => hideDialogDelete()}
-                      >
-                        Cancel{" "}
-                      </Button>
-                      <Button
-                        className="bg-green-500 text-slate-900"
-                        onPress={() => {
-                          handleDeleteItem({ id: id }), hideDialogDelete();
-                        }}
-                      >
-                        OK
-                      </Button>
-                    </Dialog.Content>
-                  </Dialog>
-                </Portal>
+                  <ModalController style={{fontSize : 10}} visible={visibleDelete}
+                    hideDialog={hideDialogDelete}
+                title={"Bạn muốn xóa không?"}>
+                   <View className="flex flex-row p-5 mr-4 justify-evenly">
+                   <Button 
+          width={65}
+          height={45}
+          backgroundColor={"rgb(22,101,52)"}
+          padding={16}
+          onOk={() => {
+            handleDeleteItem({ id: id }), hideDialogDelete();
+          }}
+          okText={"Xóa"}
+        />
+        <Button
+          backgroundColor={"rgb(220,38,38)"}
+          width={65}
+          height={45}
+          padding={15}
+         
+          onOk={() => hideDialogDelete(true)}
+          okText={"Hủy"}
+        />
+        </View>
+  
+                 </ModalController>
+                
+               
                 <View className="flex flex-row ">
                   <Icon
                     className="mr-2"
@@ -150,7 +139,7 @@ const Items = () => {
         <Button
           width={80}
           height={45}
-          backgroundColor={"#3F979B"}
+          backgroundColor={"rgb(22,101,52)"}
           borderRadius={8}
           textAlign={"center"}
           padding={14}
@@ -165,7 +154,7 @@ const Items = () => {
           okText={"Submit"}
         />
         <Button
-          backgroundColor={"#3F979B"}
+          backgroundColor={"rgb(220,38,38)"}
           width={80}
           height={45}
           borderRadius={8}
@@ -182,19 +171,6 @@ const Items = () => {
         visible={visible}
         hideDialog={hideDialog}
         title={"Cập nhật thông tin"}
-        onOk={() => {
-          nameUpdate && ageUpdate
-            ? handleUpdateItem({
-                name: nameUpdate,
-                id: idUpdate,
-                age: ageUpdate,
-              })
-            : alert("Vui lòng nhập tên cập nhật"),
-            setNameUpdate(""),
-            setAgeUpdate(""),
-            hideDialog(true);
-        }}
-        onCancel={() => hideDialog(true)}
       >
         <TextInput
           className="w-[310] h-[50] border p-3 rounded-md mb-5"
@@ -211,6 +187,40 @@ const Items = () => {
           }}
           value={ageUpdate}
         />
+        <View className="flex flex-row py-5 justify-evenly">
+        <Button
+          width={80}
+          height={45}
+          backgroundColor={"rgb(22,101,52)"}
+          borderRadius={8}
+          textAlign={"center"}
+          padding={14}
+          onOk={() => {
+            nameUpdate && ageUpdate
+              ? handleUpdateItem({
+                  name: nameUpdate,
+                  id: idUpdate,
+                  age: ageUpdate,
+                })
+              : alert("Vui lòng nhập tên cập nhật"),
+              setNameUpdate(""),
+              setAgeUpdate(""),
+              hideDialog(true);
+          }}
+          okText={"Submit"}
+        />
+        <Button
+          backgroundColor={"rgb(220,38,38)"}
+          width={80}
+          height={45}
+          borderRadius={8}
+          textAlign={"center"}
+          padding={14}
+          onOk={() => hideDialog(true)}
+          okText={"Cancel"}
+        />
+
+        </View>
       </ModalController>
     </View>
   );
