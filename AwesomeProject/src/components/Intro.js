@@ -49,9 +49,7 @@ const Items = () => {
         <DataTable.Title numeric>Age</DataTable.Title>
         <DataTable.Title numeric>Action</DataTable.Title>
       </DataTable.Header>
-      <FlatList
-            data={items}
-            renderItem={({ item, index }) => (
+      <FlatList  data={items}  renderItem={({ item, index }) => (
               <DataTable.Row
                 key={index} >
                 <DataTable.Cell>{item.name}</DataTable.Cell>
@@ -91,13 +89,8 @@ const Items = () => {
                         okText={"Hủy"} />
                     </View>
       </ModalController>
-      <ModalController
-        visible={visibleAdd}
-        hideDialog={hideDialogAdd}
-        title={"Thêm mới"}>
-        <InputCommonLayerTwo
-          type={"text"}
-          marginBottom={20}  
+      <ModalController visible={visibleAdd} hideDialog={hideDialogAdd} title={"Thêm mới"}>
+        <InputCommonLayerTwo type={"text"} marginBottom={20}  
           onChange={(text) => {
             setName(text);
           }}
@@ -121,18 +114,12 @@ const Items = () => {
         </View>
       </ModalController>
       <ModalController visible={visible}  hideDialog={hideDialog} title={"Cập nhật thông tin"} >
-        <InputCommonLayerTwo
-          type={"text"}
-          marginBottom={20}
+        <InputCommonLayerTwo type={"text"}  marginBottom={20}
           onChange={(text) => {
             setNameUpdate(text);
           }}
-          value={nameUpdate}
-        />
-        <InputCommonLayerTwo
-          type={"number"}
-          onChange={(text) => setAgeUpdate(text) }
-          value={ageUpdate} />
+          value={nameUpdate} />
+        <InputCommonLayerTwo type={"number"}  onChange={(text) => setAgeUpdate(text) } value={ageUpdate} />
         <View className="flex flex-row py-5 justify-evenly">
           <ButtonCommonLayerTwo  backgroundColor={"rgb(22,101,52)"} 
             onOk={() => { nameUpdate && ageUpdate
@@ -147,10 +134,7 @@ const Items = () => {
                 hideDialog(true);
             }}
             okText={"Submit"} />
-          <ButtonCommonLayerTwo
-            backgroundColor={"rgb(220,38,38)"}
-            onOk={() => hideDialog(true)}
-            okText={"Cancel"} />
+          <ButtonCommonLayerTwo backgroundColor={"rgb(220,38,38)"} onOk={() => hideDialog(true)}  okText={"Cancel"} />
         </View>
       </ModalController>
     </View>
