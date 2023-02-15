@@ -1,15 +1,12 @@
 import * as React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Dialog, Portal } from "react-native-paper";
-// import Modal from '../Modal';
-import Button from './Button';
 
 export default function ModalController({
   visible,
   hideDialog,
   title,
-  children,
-
+  children
 }) {
   return (
     <Portal>

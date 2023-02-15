@@ -6,7 +6,6 @@ export const UseItem = () => {
     const items = useSelector((state) => state.items.listItem)
     const totalPage = useSelector((state) => state.items.totalPage)
     const activePage = useSelector((state) => state.items.activePage)
-
  
     const handleGetItem = () => dispatch(ItemAction.getRequest())
     const handleAddItem = (data) => dispatch(ItemAction.addRequest(data))

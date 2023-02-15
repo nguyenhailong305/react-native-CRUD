@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  Text,
-  TextInput,
   FlatList,
-  TouchableOpacity,
 } from "react-native";
 import { UseItem } from "../hooks";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Dialog, Portal } from "react-native-paper";
 import ModalController from "./common/ModalController";
-import Button from "./common/Button";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { DataTable } from "react-native-paper";
+import ButtonCommonLayerTwo from "./common/ButtonCommonLayerTwo";
+import InputCommonLayerTwo from "./common/InputCommonLayerTwo";
+
 const Items = () => {
   const {
     items,
@@ -20,20 +19,19 @@ const Items = () => {
     handleUpdateItem,
   } = UseItem();
 
-  useEffect(() => {
-    handleGetItem();
-  }, []);
-
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [idUpdate, setIdUpdate] = useState("");
   const [nameUpdate, setNameUpdate] = useState("");
   const [ageUpdate, setAgeUpdate] = useState(0);
-
   const [visibleDelete, setDelete] = useState(false);
   const [visibleAdd, setAdd] = useState(false);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    handleGetItem()
+  }, []);
 
   const hideDialogAdd = () => setAdd(!visibleAdd);
   const hideDialogDelete = () => setDelete(!visibleDelete);
@@ -41,219 +39,122 @@ const Items = () => {
 
   return (
     <View>
-      <View style={{ left : "80%" , top : "5%"}} >
-        <Button backgroundColor={"rgb(99,102,241)"} width={70} height={50} padding={18} okText={"Add"} onOk={() => hideDialogAdd()}/>
+      <View style={{ left: "80%", marginTop: 20 }}>
+        <ButtonCommonLayerTwo  backgroundColor={"rgb(99,102,241)"} okText={"Add"} onOk={() => hideDialogAdd()} />
       </View>
-      <View className=" border mt-5">
-        <View style={styles.tableHeader}>
-          <Text style={styles.tableHeaderText}>Name</Text>
-          <Text style={styles.tableHeaderText}>Age</Text>
-          <Text style={styles.tableHeaderText}>Action</Text>
-        </View>
-        <FlatList
-          data={items}
-          renderItem={({ item, index }) => (
-            <View key={index} style={styles.tableRow}>
-              <Text style={styles.tableCell}>{item.name}</Text>
-              <Text style={styles.tableCell}>{item.age}</Text>
-              <View style={styles.tableCell}>
-                  <ModalController style={{fontSize : 10}} visible={visibleDelete}
-                    hideDialog={hideDialogDelete}
-                title={"Bạn muốn xóa không?"}>
-                   <View className="flex flex-row p-5 mr-4 justify-evenly">
-                   <Button 
-          width={65}
-          height={45}
-          backgroundColor={"rgb(22,101,52)"}
-          padding={16}
-          onOk={() => {
-            handleDeleteItem({ id: id }), hideDialogDelete();
-          }}
-          okText={"Xóa"}
-        />
-        <Button
-          backgroundColor={"rgb(220,38,38)"}
-          width={65}
-          height={45}
-          padding={15}
-         
-          onOk={() => hideDialogDelete(true)}
-          okText={"Hủy"}
-        />
-        </View>
-  
-                 </ModalController>
-                
-               
-                <View className="flex flex-row ">
-                  <Icon
-                    className="mr-2"
-                    onPress={() => {
-                      hideDialog(
-                        setIdUpdate(item._id),
-                        setNameUpdate(item.name),
-                        setAgeUpdate(item.age.toString())
-                      );
-                    }}
-                    name="pen"
-                    size={20}
-                    color="#7BA990"
-                  />
-
-                  <Icon
-                    onPress={() => {
-                      setId(item._id), setDelete(true);
-                    }}
-                    name="trash-can-outline"
-                    size={20}
-                    color="#7BA990"
-                  />
-                </View>
-              </View>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+      <View className="flex flex-col border mt-5 flex-auto">
+      <DataTable  style={{ flexGrow: 1}}>
+      <DataTable.Header>
+        <DataTable.Title>Name</DataTable.Title>
+        <DataTable.Title numeric>Age</DataTable.Title>
+        <DataTable.Title numeric>Action</DataTable.Title>
+      </DataTable.Header>
+      <FlatList
+            data={items}
+            renderItem={({ item, index }) => (
+              <DataTable.Row
+                key={index} >
+                <DataTable.Cell>{item.name}</DataTable.Cell>
+                <DataTable.Cell numeric>{item.age}</DataTable.Cell>     
+                  <DataTable.Cell numeric className="flex flex-row ">
+                    <Icon className="mr-2"
+                      onPress={() => {
+                        hideDialog(
+                          setIdUpdate(item._id),
+                          setNameUpdate(item.name),
+                          setAgeUpdate(item.age.toString())
+                        );
+                      }}
+                      name="pen"
+                      size={20}
+                      color="#7BA990" />
+                    <Icon  onPress={() => {  setId(item._id), setDelete(true) }}
+                      name="trash-can-outline"
+                      size={20}
+                      color="#7BA990" />
+                  </DataTable.Cell>
+                </DataTable.Row>
+                 )}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 5 }}   />
+    </DataTable>
       </View>
+      <ModalController  visible={visibleDelete}  hideDialog={hideDialogDelete} title={"Bạn muốn xóa không?"}>
+                    <View className="flex flex-row p-5 mr-4 justify-evenly">
+                      <ButtonCommonLayerTwo backgroundColor={"rgb(22,101,52)"}
+                        onOk={() => { handleDeleteItem({ id: id }), hideDialogDelete(true)  ;
+                        }}
+                        okText={"Xóa"}
+                      />
+                      <ButtonCommonLayerTwo backgroundColor={"rgb(220,38,38)"}
+                        onOk={() => hideDialogDelete(true)}
+                        okText={"Hủy"} />
+                    </View>
+      </ModalController>
       <ModalController
         visible={visibleAdd}
         hideDialog={hideDialogAdd}
-        title={"Thêm mới"}
-      >
-        <TextInput
-          className="w-[310] h-[50] border p-3 rounded-md mb-5"
-          onChangeText={(text) => {
+        title={"Thêm mới"}>
+        <InputCommonLayerTwo
+          type={"text"}
+          marginBottom={20}  
+          onChange={(text) => {
             setName(text);
           }}
           value={name}
-        />
-        <TextInput
-          type="number"
-          className="w-[310] h-[50] border p-3 rounded-md"
-          onChangeText={(text) => {
-            setAge(text);
-          }}
-          value={age}
-        />
+          placeholder={"Please enter your name "} />
+        <InputCommonLayerTwo type={"number"}  onChange={(text) => setAge(text) }  value={age}  placeholder={"Please enter your age "} />
         <View className="flex flex-row py-5 justify-evenly">
-        <Button
-          width={80}
-          height={45}
-          backgroundColor={"rgb(22,101,52)"}
-          borderRadius={8}
-          textAlign={"center"}
-          padding={14}
-          onOk={() => {
-            name
-              ? handleAddItem({ name: name, age: age })
-              : alert("Vui lòng nhập tên"),
-              setName(""),
-              setAge(""),
-              hideDialogAdd(true);
-          }}
-          okText={"Submit"}
-        />
-        <Button
-          backgroundColor={"rgb(220,38,38)"}
-          width={80}
-          height={45}
-          borderRadius={8}
-          textAlign={"center"}
-          padding={14}
-          onOk={() => hideDialogAdd(true)}
-          okText={"Cancel"}
-        />
-
+          <ButtonCommonLayerTwo backgroundColor={"rgb(22,101,52)"}
+            onOk={() => {
+              name && age
+                ? handleAddItem({ name: name, age: age })
+                : alert("Vui lòng nhập tên hoặc tuổi "),
+                setName(""),
+                setAge(""),
+                hideDialogAdd(true)
+            }}
+            okText={"Submit"}
+          />
+          <ButtonCommonLayerTwo backgroundColor={"rgb(220,38,38)"} onOk={() => hideDialogAdd(true)}
+            okText={"Cancel"} />
         </View>
-       
       </ModalController>
-      <ModalController
-        visible={visible}
-        hideDialog={hideDialog}
-        title={"Cập nhật thông tin"}
-      >
-        <TextInput
-          className="w-[310] h-[50] border p-3 rounded-md mb-5"
-          onChangeText={(text) => {
+      <ModalController visible={visible}  hideDialog={hideDialog} title={"Cập nhật thông tin"} >
+        <InputCommonLayerTwo
+          type={"text"}
+          marginBottom={20}
+          onChange={(text) => {
             setNameUpdate(text);
           }}
           value={nameUpdate}
         />
-
-        <TextInput
-          className="w-[310] h-[50] border p-3 rounded-md"
-          onChangeText={(text) => {
-            setAgeUpdate(text);
-          }}
-          value={ageUpdate}
-        />
+        <InputCommonLayerTwo
+          type={"number"}
+          onChange={(text) => setAgeUpdate(text) }
+          value={ageUpdate} />
         <View className="flex flex-row py-5 justify-evenly">
-        <Button
-          width={80}
-          height={45}
-          backgroundColor={"rgb(22,101,52)"}
-          borderRadius={8}
-          textAlign={"center"}
-          padding={14}
-          onOk={() => {
-            nameUpdate && ageUpdate
-              ? handleUpdateItem({
-                  name: nameUpdate,
-                  id: idUpdate,
-                  age: ageUpdate,
-                })
-              : alert("Vui lòng nhập tên cập nhật"),
-              setNameUpdate(""),
-              setAgeUpdate(""),
-              hideDialog(true);
-          }}
-          okText={"Submit"}
-        />
-        <Button
-          backgroundColor={"rgb(220,38,38)"}
-          width={80}
-          height={45}
-          borderRadius={8}
-          textAlign={"center"}
-          padding={14}
-          onOk={() => hideDialog(true)}
-          okText={"Cancel"}
-        />
-
+          <ButtonCommonLayerTwo  backgroundColor={"rgb(22,101,52)"} 
+            onOk={() => { nameUpdate && ageUpdate
+                ? handleUpdateItem({
+                    name: nameUpdate,
+                    id: idUpdate,
+                    age: ageUpdate,
+                  })
+                : alert("Vui lòng nhập tên hoặc tuổi cần cập nhật"),
+                setNameUpdate(""),
+                setAgeUpdate(""),
+                hideDialog(true);
+            }}
+            okText={"Submit"} />
+          <ButtonCommonLayerTwo
+            backgroundColor={"rgb(220,38,38)"}
+            onOk={() => hideDialog(true)}
+            okText={"Cancel"} />
         </View>
       </ModalController>
     </View>
   );
-};
-
-const styles = {
-  tableHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#eee",
-  },
-  tableHeaderText: {
-    padding: 10,
-  },
-  tableRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-  },
-  tableCell: {
-    padding: 10,
-  },
-  pagination: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
 };
 
 export default Items;

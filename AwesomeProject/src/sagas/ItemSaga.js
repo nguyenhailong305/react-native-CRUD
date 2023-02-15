@@ -9,7 +9,6 @@ function* handleGetItem() {
         yield put(ItemAction.getSuccess({
             listData: res.listData
         }))
-        console.log(res , 'saga')
     } catch (error) {
         yield put(ItemAction.getFailure({
             message: error.message
@@ -22,7 +21,7 @@ function* handleAddItem({ payload }) {
     try {
         yield itemApi.addItem(null, null, payload)
         yield put(ItemAction.addSuccess())
-        yield put(ItemAction.getRequest({}))
+        yield put(ItemAction.getRequest())
     } catch (error) {
         yield put(ItemAction.addFailure(error))
     }
@@ -30,7 +29,7 @@ function* handleAddItem({ payload }) {
 
 function* handleUpdateItem({payload}) {
     try {
-        const store = yield select((state ) => state.items)
+    
         yield itemApi.updateItem({id : payload.id}, null, payload)
         yield put(ItemAction.updateSuccess())
         yield put(ItemAction.getRequest({}))
@@ -51,24 +50,23 @@ function* handleDeleteItem({payload}) {
     }
 }
 
+
 function* handlePaginateItem({payload}) {
     try {
-        const res = yield itemApi.paginateItem(null, {activePage : `${payload.activePage}&` , limit : LIMIT}, payload) //param , query , data
+        const res = yield itemApi.paginateItem(null, {page : `${payload.page}&`  , limit : LIMIT}, payload)
         if(res.totalPage === 0) {
             res.totalPage = 1
         }
+        console.log(res , 'paginate')
         yield put(ItemAction.paginateSuccess({
             listData : res.listData,
             totalPage : res.totalPage,
-            activePage : payload.activePage
+            page : payload.page
         }))
     } catch (error) {
-        yield put(ItemAction.paginateFailure({
-            message: error.message
-        }))
+        yield put(ItemAction.paginateFailure(error))
     }
 }
-
 
 
 const itemSaga = [
@@ -76,7 +74,7 @@ const itemSaga = [
     takeLatest(actionType.Items.ADD_ITEMS_REQUEST, handleAddItem),
     takeLatest(actionType.Items.UPDATE_ITEMS_REQUEST , handleUpdateItem),
     takeLatest(actionType.Items.DELETE_ITEMS_REQUEST , handleDeleteItem),
-    takeLatest(actionType.Items.PAGINATE_ITEMS_REQUEST, handlePaginateItem),
+    takeLatest(actionType.Items.PAGINATE_ITEMS_REQUEST , handlePaginateItem),
 
 ]
 export default itemSaga

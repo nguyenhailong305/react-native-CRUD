@@ -52,6 +52,7 @@ export default function HrReducer(state = DEFAULT_STATE, { type, payload }) {
     case Items.ADD_ITEMS_FAILURE:
     case Items.DELETE_ITEMS_FAILURE:
     case Items.UPDATE_ITEMS_FAILURE:
+    case Items.PAGINATE_ITEMS_FAILURE:
       return {
         ...state,
         isFetching: false,

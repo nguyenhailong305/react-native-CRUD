@@ -49,6 +49,22 @@ exports.updateItem = async (req, res) => {
 }
 
 
+exports.paginateItem = async (req , res ) => {
+    try {
+        
+        const limit = +req.query.limit
+        const activePage = +req.query.page
+        console.log(limit , activePage , "aaaaaaaaaaaaaaaa")
+        const skip = (activePage - 1)*limit
+        const totalRecord = await Models.countDocuments({})
+        const totalPage = Math.ceil(totalRecord / limit)
+        const listData = await Models.find({}).skip(skip).limit(limit)
+        res.send({listData , totalPage})
+    } catch (error) {
+        res.send(error)
+    }
+}
+
 exports.searchItem = async (req, res) => {
     try {
         const name = req.query.textSearch
@@ -64,16 +80,3 @@ exports.searchItem = async (req, res) => {
     }
 }
 
-exports.paginateItem = async (req , res ) => {
-    try {
-        const limit = +req.query.limit
-        const activePage = +req.query.activePage
-        const skip = (activePage - 1)*limit
-        const totalRecord = await Models.countDocuments({})
-        const totalPage = Math.ceil(totalRecord / limit)
-        const listData = await Models.find({}).skip(skip).limit(limit)
-        res.send({listData , totalPage})
-    } catch (error) {
-        res.send(error)
-    }
-}
